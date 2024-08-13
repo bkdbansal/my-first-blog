@@ -123,3 +123,6 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# so that when the login page is accessed directly, it will redirect a successful login to the top-level index
+LOGIN_REDIRECT_URL = '/'

@@ -1,19 +1,52 @@
 {% extends 'blog/base.html' %}
 	{% block content %}
-			<article class="post">
-				{% if user.is_authenticated %}
+		<article class="post">
+			{% if user.is_authenticated %}
 				<aside class="actions">
-    				   <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}">
+    			  <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}">
     				   {% include './icons/pencil-fill.svg' %}
-    				   </a>
-				</aside>
-				{% endif %}
-			  {% if post.published_date %}
+    				</a>
+<!-- 					<a href="{% url 'post_remove' pk=post.pk %}" class="btn btn-secondary">
+    					{% include './icons/x-square-fill.svg' %} </a> -->
+    				</aside>
+    				<form action="{% url 'post_remove' pk=post.pk %}" method="POST" class="post-form">{% csrf_token %}
+						<button type="submit" class="post btn btn-danger" name="delete">Delete<span class="glyphicon glyphicon-remove"></span></button>
+					</form>
+			{% endif %}
+			{% if post.published_date %}
 				<time class="date">
 					{{ post.published_date }}
 				</time>
-			   {% endif %}
+			{% else %}
+					<!-- <a href="{% url 'post_publish' pk=post.pk %}" class="btn btn-secondary">Publish</a> -->
+					<form action="{%url 'post_publish' pk=post.pk%}" method="POST" class="post-form">{% csrf_token %}
+       				 <button type="submit" class="post btn btn-info" name="publish">Publish</button>
+    				</form>
+			{% endif %}
 				<h2>{{ post.title }}</h2>
 				<p>{{ post.text|linebreaksbr }}</p>
-			</article>
+		</article>
+		 <hr>
+		 	<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+		{% for comment in post.comments.all %}
+		    {% if user.is_authenticated or comment.approved_comment %}
+		    <div class="comment">
+		        <div class="date">
+		            {{ comment.created_date }}
+		            {% if not comment.approved_comment %}
+		                <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}">
+		                   {% include './icons/hand-thumbs-down.svg' %}
+		                </a>
+		                <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}">
+		                   {% include './icons/hand-thumbs-up.svg' %}
+		                </a>
+		            {% endif %}
+		        </div>
+		        <strong>{{ comment.author }}</strong>
+		        <p>{{ comment.text|linebreaks }}</p>
+		    </div>
+		    {% endif %}
+		{% empty %}
+		    <p>No comments here yet :(</p>
+		{% endfor %}
 	{% endblock %}
