@@ -17,8 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views
-from debug_toolbar.toolbar import debug_toolbar_urls
-from django.conf import settings
 
 from api.resources import NoteResource
 note_resource = NoteResource()
@@ -31,8 +29,3 @@ urlpatterns = [
     path('api/', include(note_resource.urls)),
     path('polls/', include('polls.urls')),
 ]
-
-if not settings.TESTING:
-    urlpatterns = [
-        *urlpatterns,
-    ] + debug_toolbar_urls()
