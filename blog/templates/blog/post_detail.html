@@ -2,16 +2,16 @@
 	{% block content %}
 		<article class="post">
 			{% if user.is_authenticated %}
-				<div class="submit-row">
-    			  <a class="btn btn-secondary" type="submit" href="{% url 'post_edit' pk=post.pk %}">Edit</a>
-    			  <a class="btn btn-secondary" type="submit" href="{% url 'post_remove' pk=post.pk %}">Delete</a>
-    			      				   <!-- {% include './icons/pencil-fill.svg' %} -->
+				<aside class="actions">
+    			  <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}">
+    				   {% include './icons/pencil-fill.svg' %}
+    				</a>
 <!-- 					<a href="{% url 'post_remove' pk=post.pk %}" class="btn btn-secondary">
     					{% include './icons/x-square-fill.svg' %} </a> -->
-<!--     				<form action="{% url 'post_remove' pk=post.pk %}" method="POST" class="post-form">{% csrf_token %}
+    				</aside>
+    				<form action="{% url 'post_remove' pk=post.pk %}" method="POST" class="post-form">{% csrf_token %}
 						<button type="submit" class="post btn btn-danger" name="delete">Delete<span class="glyphicon glyphicon-remove"></span></button>
-					</form> -->
-				</div>
+					</form>
 			{% endif %}
 			{% if post.published_date %}
 				<time class="date">
