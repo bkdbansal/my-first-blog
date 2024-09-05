@@ -67,7 +67,6 @@ class ExpenseViewSet(viewsets.ModelViewSet):
             type=type,
             description=data.get('description'),
             payer=payer)
-        print(expense, expense.amount, expense.type)
 
         # Update Participant records
         self.update_participant(expense, calculated_shares)
@@ -75,7 +74,8 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         #Update the Transaction records
         self.update_transaction(calculated_shares)
 
-        return Response({'message': 'Expense added or updated successfully'}, status=status.HTTP_201_CREATED)
+        serializer = ExpenseSerializer(expense)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update_participant(self, expense, shares):
         # Get existing Participant records
@@ -203,7 +203,7 @@ def simplify_expenses(request):
     for borrower, lenders in simplified_debts.items():
         for lender, amount in lenders.items():
         # result[borrower.userId] = {lender.userId: amount for lender, amount in lenders.items()}
-            result.append(f"From user {borrower.userId} to user {lender.userId} transfer : {amount}")
+            result.append(f" {borrower.name} owes {lender.name} : {amount}")
     return Response(result, status=status.HTTP_200_OK)
 
 
